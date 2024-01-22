@@ -8,3 +8,13 @@ features:
   vectorizer: count-vectorizer
   train_features_save_path: ../datasets/imdb_sentiment/train.joblib
   test_features_save_path: ../datasets/imdb_sentiment/test.joblib
+
+train:
+  penalty: l2
+  C: 1.0
+  solver: lbfgs
+  model_save_path: ../results/imdb_results/model.joblib
+
+evaluate:
+  metric: f1_score
+  results_save_path: ../results/imdb_results/results.yaml
