@@ -1,0 +1,10 @@
+data:
+  csv_file_path: ../datasets/imdb_sentiment/imdb_dataset.csv
+  test_set_ratio: 0.3
+  train_csv_save_path: ../datasets/imdb_sentiment/imdb_dataset_train.csv
+  test_csv_save_path: ../datasets/imdb_sentiment/imdb_dataset_test.csv
+
+features:
+  vectorizer: count-vectorizer
+  train_features_save_path: ../datasets/imdb_sentiment/train.joblib
+  test_features_save_path: ../datasets/imdb_sentiment/test.joblib
