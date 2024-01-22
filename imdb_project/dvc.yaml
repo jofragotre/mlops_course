@@ -1,0 +1,44 @@
+stages:
+  prepare_data:
+    cmd: python ./prepare_data.py
+    deps:
+      - ./prepare_data.py
+      - ../datasets/imdb_sentiment/imdb_dataset.csv
+    params:
+      - data
+    outs:
+      - ../datasets/imdb_sentiment/imdb_dataset_train.csv
+      - ../datasets/imdb_sentiment/imdb_dataset_test.csv
+  make_features:
+    cmd: python ./make_features.py
+    deps:
+      - ./make_features.py
+      - ../datasets/imdb_sentiment/imdb_dataset_train.csv
+      - ../datasets/imdb_sentiment/imdb_dataset_test.csv
+    params:
+      - features
+    outs:
+      - ../datasets/imdb_sentiment/train.joblib
+      - ../datasets/imdb_sentiment/test.joblib
+  train:
+    cmd: python ./train.py
+    deps:
+      - ./train.py
+      - ../datasets/imdb_sentiment/imdb_dataset_train.csv
+      - ../datasets/imdb_sentiment/train.joblib
+    params:
+      - train
+    outs:
+      - ../results/imdb_results/model.joblib
+  evaluate:
+    cmd: python ./evaluate.py
+    deps:
+      - ./evaluate.py
+      - ../datasets/imdb_sentiment/imdb_dataset_test.csv
+      - ../datasets/imdb_sentiment/test.joblib
+      - ../results/imdb_results/model.joblib
+    params:
+      - evaluate
+    metrics:
+      - ../results/imdb_results/results.yaml:
+          cache: false

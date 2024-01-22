@@ -1,0 +1,115 @@
+schema: '2.0'
+stages:
+  prepare_data:
+    cmd: python ./prepare_data.py
+    deps:
+    - path: ../datasets/imdb_sentiment/imdb_dataset.csv
+      hash: md5
+      md5: 308443a50e5c993e7b8a1cdb95750026
+      size: 66212309
+    - path: ./prepare_data.py
+      hash: md5
+      md5: 4e58185982f84149761741d0f1a7381c
+      size: 668
+    params:
+      params.yaml:
+        data:
+          csv_file_path: ../datasets/imdb_sentiment/imdb_dataset.csv
+          test_set_ratio: 0.3
+          train_csv_save_path: ../datasets/imdb_sentiment/imdb_dataset_train.csv
+          test_csv_save_path: ../datasets/imdb_sentiment/imdb_dataset_test.csv
+    outs:
+    - path: ../datasets/imdb_sentiment/imdb_dataset_test.csv
+      hash: md5
+      md5: 90a4dc6b916dbef41d372e931378cddd
+      size: 19848031
+    - path: ../datasets/imdb_sentiment/imdb_dataset_train.csv
+      hash: md5
+      md5: 901990d46f51767548b81e1cc4dafe0c
+      size: 46514309
+  make_features:
+    cmd: python ./make_features.py
+    deps:
+    - path: ../datasets/imdb_sentiment/imdb_dataset_test.csv
+      hash: md5
+      md5: 90a4dc6b916dbef41d372e931378cddd
+      size: 19848031
+    - path: ../datasets/imdb_sentiment/imdb_dataset_train.csv
+      hash: md5
+      md5: 901990d46f51767548b81e1cc4dafe0c
+      size: 46514309
+    - path: ./make_features.py
+      hash: md5
+      md5: 2e5f1f7e1aabeb376f5a398e2ae9c5a9
+      size: 918
+    params:
+      params.yaml:
+        features:
+          vectorizer: count-vectorizer
+          train_features_save_path: ../datasets/imdb_sentiment/train.joblib
+          test_features_save_path: ../datasets/imdb_sentiment/test.joblib
+    outs:
+    - path: ../datasets/imdb_sentiment/test.joblib
+      hash: md5
+      md5: ce3d33bebe10dfc5e8426f731110050f
+      size: 15817235
+    - path: ../datasets/imdb_sentiment/train.joblib
+      hash: md5
+      md5: 6454c716d582c61f226c6d45bf13e180
+      size: 37416211
+  train:
+    cmd: python ./train.py
+    deps:
+    - path: ../datasets/imdb_sentiment/imdb_dataset_train.csv
+      hash: md5
+      md5: 901990d46f51767548b81e1cc4dafe0c
+      size: 46514309
+    - path: ../datasets/imdb_sentiment/train.joblib
+      hash: md5
+      md5: 6454c716d582c61f226c6d45bf13e180
+      size: 37416211
+    - path: ./train.py
+      hash: md5
+      md5: 4783a1c8304731eaccc1c0789f5c9c85
+      size: 692
+    params:
+      params.yaml:
+        train:
+          penalty: l2
+          C: 1.0
+          solver: lbfgs
+          model_save_path: ../results/imdb_results/model.joblib
+    outs:
+    - path: ../results/imdb_results/model.joblib
+      hash: md5
+      md5: 851add837e24010fd749a15ba7ecbd3d
+      size: 704335
+  evaluate:
+    cmd: python ./evaluate.py
+    deps:
+    - path: ../datasets/imdb_sentiment/imdb_dataset_test.csv
+      hash: md5
+      md5: 90a4dc6b916dbef41d372e931378cddd
+      size: 19848031
+    - path: ../datasets/imdb_sentiment/test.joblib
+      hash: md5
+      md5: ce3d33bebe10dfc5e8426f731110050f
+      size: 15817235
+    - path: ../results/imdb_results/model.joblib
+      hash: md5
+      md5: 851add837e24010fd749a15ba7ecbd3d
+      size: 704335
+    - path: ./evaluate.py
+      hash: md5
+      md5: 0c4f187cdde28ed218b0f01bf2268a14
+      size: 953
+    params:
+      params.yaml:
+        evaluate:
+          metric: f1_score
+          results_save_path: ../results/imdb_results/results.yaml
+    outs:
+    - path: ../results/imdb_results/results.yaml
+      hash: md5
+      md5: 0cce964c1c9b69fc05b1176458125c54
+      size: 30
