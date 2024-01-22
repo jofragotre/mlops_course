@@ -1,0 +1,6 @@
+outs:
+- md5: 93b99142193fe15b50e9eb2423e87a2c.dir
+  size: 132574649
+  nfiles: 3
+  hash: md5
+  path: imdb_sentiment
