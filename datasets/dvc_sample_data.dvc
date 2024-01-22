@@ -1,0 +1,6 @@
+outs:
+- md5: 21c04bb400750bd17f8142eb3ec2ca08.dir
+  size: 67039
+  nfiles: 2
+  hash: md5
+  path: dvc_sample_data
